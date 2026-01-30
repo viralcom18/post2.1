@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Download Video</title>
+
+<meta name="description" content="Fast and secure video download page with automatic high speed download.">
+<meta name="keywords" content="video download, fast download, high speed download">
+<meta name="author" content="Task Earn India">
+<meta name="robots" content="index, follow">
+
+<style>
+:root {
+  --primary:#2563eb;
+  --secondary:#22c55e;
+  --dark:#0f172a;
+  --light:#f8fafc;
+  --text:#334155;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,Arial,sans-serif;
+  background:linear-gradient(135deg,#e0f2fe,#f0fdf4);
+  color:var(--text);
+}
+
+/* Blur when popup active */
+.blur {
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.download-box{
+  background:#fff;
+  width:min(92%,420px);
+  padding:30px 24px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.download-box h2{
+  margin-top:0;
+  color:var(--dark);
+}
+
+.download-box p{
+  font-size:15px;
+  margin-bottom:20px;
+}
+
+.btn{
+  display:inline-block;
+  padding:14px 30px;
+  font-size:16px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  background:var(--secondary);
+  color:#fff;
+  font-weight:600;
+  text-decoration:none;
+  transition:.2s;
+  width:100%;
+}
+
+.btn:hover{
+  background:#16a34a;
+}
+
+.timer{
+  margin-top:15px;
+  font-weight:600;
+  color:var(--primary);
+}
+
+/* ===== 18+ POPUP ===== */
+.age-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.age-box{
+  background:#fff;
+  padding:25px 22px;
+  border-radius:14px;
+  width:min(92%,380px);
+  text-align:center;
+}
+
+.age-box h2{
+  margin-top:0;
+  color:#dc2626;
+}
+
+.age-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.age-buttons button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.yes-btn{background:#22c55e;color:#fff;}
+.no-btn{background:#ef4444;color:#fff;}
+
+@media(max-width:500px){
+  .download-box{padding:24px 18px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- 18+ Popup -->
+<div class="age-overlay" id="agePopup">
+  <div class="age-box">
+    <h2>18+ Age Confirmation</h2>
+    <p>This website contains adult content.<br>You must be 18 years or older to enter.</p>
+
+    <div class="age-buttons">
+      <button class="yes-btn" onclick="allowAccess()">I am 18+</button>
+      <button class="no-btn" onclick="exitSite()">Exit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="download-box blur" id="mainContent">
+  <h2>Your Download is Ready</h2>
+  <p>Click the button below to start downloading your video in high speed.</p>
+
+  <button id="downloadBtn" class="btn">Download Video</button>
+
+  <div id="timerText" class="timer"></div>
+</div>
+
+<script>
+/* ====== PUT YOUR VIDEO LINK HERE ====== */
+const videoURL = "https://example.com/video.mp4";
+
+/* ===== Age Popup Logic ===== */
+function allowAccess(){
+  document.getElementById("agePopup").style.display = "none";
+  document.getElementById("mainContent").classList.remove("blur");
+}
+
+function exitSite(){
+  window.location.href = "https://www.google.com";
+}
+
+/* ===== Download Logic ===== */
+document.getElementById("downloadBtn").addEventListener("click", function(){
+
+  const btn = this;
+  const timerText = document.getElementById("timerText");
+
+  let count = 3;
+
+  btn.disabled = true;
+  btn.style.opacity = "0.7";
+  btn.innerText = "Preparing download...";
+
+  timerText.innerText = "Starting in " + count + "...";
+
+  const interval = setInterval(() => {
+    count--;
+
+    if(count > 0){
+      timerText.innerText = "Starting in " + count + "...";
+    } else {
+      clearInterval(interval);
+      timerText.innerText = "Downloading...";
+      startDownload();
+    }
+  },1000);
+
+});
+
+function startDownload(){
+  const a = document.createElement("a");
+  a.href = videoURL;
+  a.download = "";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+</script>
+
+</body>
+</html>
